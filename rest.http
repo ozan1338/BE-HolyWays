@@ -1,0 +1,17 @@
+post http://localhost:5000/api/v1/user/register
+Content-Type: application/json
+
+{
+    "email":"ozan@mail.com",
+    "password":"ozan1234",
+    "name":"ozan"
+}
+
+###Login
+post http://localhost:5000/api/v1/user/login
+Content-Type: application/json
+
+{
+    "email":"ozan1@mail.com",
+    "password":"1234"
+}
