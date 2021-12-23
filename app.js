@@ -8,7 +8,7 @@ const router = require('./src/routes')
 
 const app = express();
 //serve static file
-//app.use('/uploads', express.static('uploads'))
+app.use('/uploads', express.static('uploads'))
 
 const PORT = 5000;
 //use morgan

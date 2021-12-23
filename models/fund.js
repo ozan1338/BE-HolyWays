@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   fund.init({
-    titlr: DataTypes.STRING,
+    title: DataTypes.STRING,
     thumbnail: DataTypes.STRING,
     goal: DataTypes.INTEGER,
     description: DataTypes.STRING,

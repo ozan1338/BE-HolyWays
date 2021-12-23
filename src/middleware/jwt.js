@@ -18,7 +18,7 @@ const verifyToken = (req,res,next) => {
         return next(createError.Unauthorized())
     }
 
-    const authHeader = req.headers['authorizations']
+    const authHeader = req.headers['authorization']
     const bearerToken = authHeader.split(' ')
     const token = bearerToken[1]
 
