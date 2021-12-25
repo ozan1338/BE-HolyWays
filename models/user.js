@@ -1,4 +1,6 @@
 'use strict';
+const bcrypt = require('bcrypt');
+const createError = require('http-errors')
 const {
   Model
 } = require('sequelize');
@@ -34,5 +36,17 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'user',
   });
+
+  user.addHook('beforeCreate', async(user,next)=>{
+    try {
+      
+      const hashPassword = await bcrypt.hash(user.password, 10);
+      user.password = hashPassword;
+
+    } catch (err) {
+      throw createError.InternalServerError()
+    }
+  })
+
   return user;
 };

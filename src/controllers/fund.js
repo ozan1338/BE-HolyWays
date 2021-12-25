@@ -78,10 +78,10 @@ const getFundById = async(req,res,next) => {
 const addFund = async(req,res,next) => {
     try {
         const {...data} = req.body;
-        let imageSrc = "http://localhost:5000/uploads/" + req.file.filename
+        
         const newFund = await fund.create({
             ...data,
-            thumbnail : imageSrc,
+            thumbnail : req.file.filename,
             userId: req.payload.id
         }, (err)=>{
             if(err){

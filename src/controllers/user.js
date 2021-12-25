@@ -23,10 +23,6 @@ const registerUser = async(req,res,next) => {
             throw createError.Conflict(`${valid.email} is already register`);
         }
 
-
-        const hashPassword = await bcrypt.hash(valid.password, 10);
-        valid.password = hashPassword;
-
         //save user input to db
         const data = await user.create(valid, (err)=>{
             if(err){
@@ -71,7 +67,6 @@ const loginUser = async(req,res,next) => {
             },
         });
 
-        //console.log(data[0]);
         //if email that user input there is no in our db throw error with message
         if(!data[0]){
             throw createError.NotFound("User Not Register")

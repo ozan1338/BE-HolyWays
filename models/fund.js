@@ -1,4 +1,5 @@
 'use strict';
+const createError = require('http-errors')
 const {
   Model
 } = require('sequelize');
@@ -36,5 +37,15 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'fund',
   });
+
+  fund.addHook('beforeCreate', (fund,next)=>{
+    try {
+      let imageSrc = "http://localhost:5000/uploads/" + fund.thumbnail;
+      fund.thumbnail = imageSrc
+    } catch (err) {
+      throw createError.InternalServerError();
+    }
+  });
+
   return fund;
 };
