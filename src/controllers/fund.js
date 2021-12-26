@@ -1,5 +1,6 @@
 const {transaction, fund} = require('../../models')
 const createError = require("http-errors")
+const {addFundSchema , updateFundSchema} = require("../middleware/joi")
 
 const getAllFunds = async(req,res,next)=>{
     try {
@@ -77,19 +78,23 @@ const getFundById = async(req,res,next) => {
 
 const addFund = async(req,res,next) => {
     try {
-        const {...data} = req.body;
+        //const {...data} = req.body;
+        if(!req.file){
+            throw createError.UnprocessableEntity("Please Upload Image")
+        }
         
+        const data = await addFundSchema.validateAsync(req.body)
         const newFund = await fund.create({
             ...data,
             thumbnail : req.file.filename,
             userId: req.payload.id
         }, (err)=>{
             if(err){
-                throw createError.InternalServerError()
+                throw createError.InternalServerError(err.message)
             }
         })
 
-        let fundData = await fund.findOne({
+        let fundData = await fund.findAll({
             where: {
                 id: newFund.id
             },
@@ -107,7 +112,7 @@ const addFund = async(req,res,next) => {
             }
         }, (err)=>{
             if(err){
-                throw createError.InternalServerError()
+                throw createError.InternalServerError(err.message)
             }
         })
 
@@ -128,18 +133,39 @@ const addFund = async(req,res,next) => {
 const updateFund = async(req,res,next) => {
     try {
         const {id} = req.params
-        const {...newData} = req.body
-        await fund.update(newData,{
-            where: {
-                id
-            }
-        }, (err)=>{
-            if(err){
-                throw createError.InternalServerError()
-            }
-        });
+        //const {...newData} = req.body
 
-        const updateData = await fund.findOne({
+        const {...newData} = await updateFundSchema.validateAsync(req.body)
+
+        if(!req.file){
+            await fund.update({...newData},{
+                where: {
+                    id
+                }
+            }, (err)=>{
+                if(err){
+                    throw createError.InternalServerError()
+                }
+            });
+        }else{
+            await fund.update(
+                {
+                    ...newData,
+                    thumbnail: req.file.filename
+                },{
+                where: {
+                    id
+                }
+            }, (err)=>{
+                if(err){
+                    throw createError.InternalServerError()
+                }
+            });
+        }
+
+        
+
+        const updateData = await fund.findAll({
             where:{
                 id
             },

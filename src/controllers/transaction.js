@@ -21,7 +21,7 @@ const addTransaction = async(req,res,next) => {
             }
         })
 
-        let fundData = await fund.findOne({
+        let fundData = await fund.findAll({
             where:{
                 id: fundId
             },
@@ -83,7 +83,7 @@ const updateTransaction = async(req,res,next) => {
 
         //console.log(updatets);
 
-        const updateData = await fund.findOne({
+        const updateData = await fund.findAll({
             where:{
                 id:fundId
             },

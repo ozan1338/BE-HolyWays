@@ -26,7 +26,7 @@ router.delete("/user/:id", deleteUser);
 router.get("/fund", getAllFunds);
 router.post("/fund", verifyToken, uploadFile("thumbnail"), addFund);
 router.get("/fund/:id", getFundById);
-router.patch("/fund/:id", verifyToken, updateFund);
+router.patch("/fund/:id", verifyToken, uploadFile("thumbnail") , updateFund);
 router.delete("/fund/:id", verifyToken, deleteFund);
 
 //Router Transaction

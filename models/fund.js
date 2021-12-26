@@ -38,12 +38,14 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'fund',
   });
 
-  fund.addHook('beforeCreate', (fund,next)=>{
+  
+  fund.addHook('afterFind', (fund)=>{
     try {
-      let imageSrc = "http://localhost:5000/uploads/" + fund.thumbnail;
-      fund.thumbnail = imageSrc
+      
+      let imageSrc = "http://localhost:5000/uploads/" + fund[0].thumbnail;
+      fund[0].thumbnail = imageSrc;
     } catch (err) {
-      throw createError.InternalServerError();
+      throw createError.InternalServerError(err.message);
     }
   });
 

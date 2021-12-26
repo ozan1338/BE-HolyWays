@@ -1,4 +1,6 @@
 'use strict';
+const createError = require('http-errors')
+
 const {
   Model
 } = require('sequelize');
@@ -36,5 +38,14 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'transaction',
   });
+
+  transaction.addHook("beforeCreate", (transaction)=>{
+    try {
+      transaction.status = "pending"
+    } catch (err) {
+      throw createError.InternalServerError()
+    }
+  })
+
   return transaction;
 };

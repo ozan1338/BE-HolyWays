@@ -41,9 +41,9 @@ const uploadFile = (imageFile) => {
             }
 
             //show an error if file doesnt provided requirement
-            if(!req.file){
-                throw createError.UnprocessableEntity("Please select file to upload")
-            }
+            // if(!req.file){
+            //     throw createError.UnprocessableEntity("Please select file to upload")
+            // }
             
             //if there is no error
             return next()
