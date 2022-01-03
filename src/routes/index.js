@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 //User Controller
-const { registerUser,loginUser,getUsers,deleteUser } = require("../controllers/user");
+const { registerUser,loginUser,getUsers,deleteUser, getUserById } = require("../controllers/user");
 
 //Fund Controller
 const {getAllFunds, addFund, getFundById, updateFund, deleteFund} = require("../controllers/fund")
@@ -20,6 +20,7 @@ const uploadFile = require("../middleware/multer")
 router.post("/user/register", registerUser);
 router.post("/user/login", loginUser);
 router.get("/user", getUsers);
+router.get('/user/:id', getUserById)
 router.delete("/user/:id", deleteUser);
 
 //Router Fund
@@ -30,8 +31,8 @@ router.patch("/fund/:id", verifyToken, uploadFile("thumbnail") , updateFund);
 router.delete("/fund/:id", verifyToken, deleteFund);
 
 //Router Transaction
-router.post("/fund/:fundId/:userId", verifyToken, uploadFile("proofAttachment"), addTransaction);
-router.patch("/fund/:fundId/:userId", verifyToken, updateTransaction);
+router.post("/fund/:fundId", verifyToken, uploadFile("proofAttachment"), addTransaction);
+router.patch("/fund/:fundId/:userId/:id", verifyToken, updateTransaction);
 
 
 module.exports = router

@@ -1,4 +1,4 @@
-const {transaction, fund} = require('../../models')
+const {transaction, fund, user} = require('../../models')
 const createError = require("http-errors")
 const {addFundSchema , updateFundSchema} = require("../middleware/joi")
 
@@ -10,12 +10,12 @@ const getAllFunds = async(req,res,next)=>{
                     model:transaction,
                     as:"userDonate",
                     attributes:{
-                        exclude:["createdAt","updatedAt","fundId","userId"]
+                        exclude:["updatedAt","fundId","userId"]
                     }
                 }
             ],
             attributes: {
-                exclude:["createdAt","updatedAt","userId"]
+                exclude:["createdAt","updatedAt"]
             }
         }, (err)=>{
             if(err){
@@ -47,13 +47,20 @@ const getFundById = async(req,res,next) => {
                 {
                     model:transaction,
                     as:"userDonate",
+                    include: {
+                        model:user,
+                        as:"user",
+                        attributes: {
+                            exclude:["id","password","createdAt","updatedAt"]
+                        }
+                    },
                     attributes:{
-                        exclude:["createdAt","updatedAt","fundId","userId"]
+                        exclude:["updatedAt"]
                     }
                 }
             ],
             attributes:{
-                exclude:["createdAt","updatedAt","userId"]
+                exclude:["createdAt","updatedAt"]
             }
         }, (err)=>{
             if(err){
@@ -82,6 +89,7 @@ const addFund = async(req,res,next) => {
         if(!req.file){
             throw createError.UnprocessableEntity("Please Upload Image")
         }
+        console.log(req.file);
         
         const data = await addFundSchema.validateAsync(req.body)
         const newFund = await fund.create({

@@ -15,6 +15,7 @@ const createToken = (userId,userName,userEmail) => {
 
 const verifyToken = (req,res,next) => {
     if(!req.headers['authorization']){
+        console.log("nihao");
         return next(createError.Unauthorized())
     }
 
@@ -25,6 +26,7 @@ const verifyToken = (req,res,next) => {
     jwt.verify(token, process.env.TOKEN_SECRET, (err,payload)=>{
         if(err){
             if(err.name === 'JsonWebTokenError'){
+                console.log("ciao");
                 return next(createError.Unauthorized())
             }else{
                 return next(createError.Unauthorized(err.message))

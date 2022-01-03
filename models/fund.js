@@ -39,11 +39,13 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   
-  fund.addHook('afterFind', (fund)=>{
+  fund.addHook('beforeCreate', (fund)=>{
     try {
-      
-      let imageSrc = "http://localhost:5000/uploads/" + fund[0].thumbnail;
-      fund[0].thumbnail = imageSrc;
+      // fund.map((item)=>{
+      //   return item.thumbnail = "http://localhost:5000/uploads/" + item.thumbnail;
+      // })
+      let imageSrc = "http://localhost:5000/uploads/" + fund.thumbnail;
+      fund.thumbnail = imageSrc;
     } catch (err) {
       throw createError.InternalServerError(err.message);
     }

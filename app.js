@@ -1,6 +1,7 @@
 const express = require('express');
 const createError = require('http-errors')
 const morgan = require('morgan')
+const cors = require('cors')
 require('dotenv').config();
 
 //import route from src/route/index
@@ -13,6 +14,8 @@ app.use('/uploads', express.static('uploads'))
 const PORT = 5000;
 //use morgan
 app.use(morgan("dev"));
+//user cors
+app.use(cors())
 //parse json
 app.use(express.json());
 

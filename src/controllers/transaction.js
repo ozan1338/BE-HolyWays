@@ -4,7 +4,7 @@ const createError = require("http-errors")
 const addTransaction = async(req,res,next) => {
     try {
         
-        const {fundId,userId} = req.params
+        const {fundId} = req.params
         const {...data} = req.body;
         //const userId = req.payload.id;
         let imageSrc = "http://localhost:5000/uploads/" + req.file.filename
@@ -12,7 +12,7 @@ const addTransaction = async(req,res,next) => {
         await transaction.create({
             ...data,
             proofAttachment: imageSrc,
-            userId:userId,
+            userId:req.payload.id,
             fundId:fundId,
             status: "pending"
         }, (err)=>{
@@ -67,13 +67,14 @@ const addTransaction = async(req,res,next) => {
 
 const updateTransaction = async(req,res,next) => {
     try {
-        const {fundId,userId} = req.params;
+        const {fundId,userId,id} = req.params;
         const {...newData} = req.body;
 
         const updatets = await transaction.update(newData, {
             where:{
                 userId,
-                fundId
+                fundId,
+                id
             }
         }, (err)=>{
             if(err){

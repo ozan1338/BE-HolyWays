@@ -16,7 +16,7 @@ const addFundSchema = joi.object({
     thumbnail: joi.string(),
     goal: joi.number().required(),
     description: joi.string().required(),
-    userId: joi.number().required()
+    userId: joi.number()
 })
 
 const updateFundSchema = joi.object({

@@ -2,7 +2,7 @@ const {registerSchema,loginSchema} = require('../middleware/joi')
 const createError = require('http-errors')
 const {createToken} = require('../middleware/jwt')
 const bcrypt = require('bcrypt')
-const {user} = require('../../models')
+const {user, transaction, fund} = require('../../models')
 
 //Create Controller register User here
 const registerUser = async(req,res,next) => {
@@ -57,6 +57,7 @@ const registerUser = async(req,res,next) => {
 const loginUser = async(req,res,next) => {
     try {
         //check if user email and password is valid
+        console.log(req.body);
         const valid = await loginSchema.validateAsync(req.body)
         const {email,password} = valid
 
@@ -97,7 +98,7 @@ const loginUser = async(req,res,next) => {
             //if its from joi set the err.status 422 unprocessable entity
             err.status = 422
         }
-        console.log(err);
+        //console.log(err);
         next(err)
     }
 }
@@ -105,6 +106,61 @@ const loginUser = async(req,res,next) => {
 const getUsers = async(req,res,next) => {
     try{
         const users = await user.findAll({
+            attributes: {
+                exclude: ["password","createdAt","updatetAt"]
+            }
+        })
+
+        res.send({
+            status: "success",
+            data: {user: [...users]}
+        })
+    }catch(err){
+        console.log(err);
+        next(err)
+    }
+}
+
+const getUserById = async(req,res,next) => {
+    try{
+        const {id} = req.params;
+
+        const users = await user.findAll({
+            where: {
+                id
+            },
+            include : [
+                {
+                    model: transaction,
+                    as: "transactions",
+                    include: {
+                        model:user,
+                        as:"user",
+                        attributes: {
+                            exclude:["id","password","createdAt","updatedAt"]
+                        }
+                    },
+                    attributes: {
+                        exclude: ["updatedAt"]
+                    }
+                },
+                {
+                    model: fund,
+                    as: "funds",
+                    attributes: {
+                        exclude:["createdAt","updatedAt"]
+                    },
+                    include : [
+                        {
+                            model:transaction,
+                            as:"userDonate",
+                            attributes:{
+                                exclude:["updatedAt","fundId","userId"]
+                            }
+                        }
+                    ]
+                }
+            ],
             attributes: {
                 exclude: ["password","createdAt","updatetAt"]
             }
@@ -153,5 +209,6 @@ module.exports = {
     registerUser,
     loginUser,
     getUsers,
+    getUserById,
     deleteUser
 }
