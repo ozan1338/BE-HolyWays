@@ -1,8 +1,8 @@
-const {registerSchema,loginSchema} = require('../middleware/joi')
+const {registerSchema,loginSchema, updateUserSchema} = require('../middleware/joi')
 const createError = require('http-errors')
 const {createToken} = require('../middleware/jwt')
 const bcrypt = require('bcrypt')
-const {user, transaction, fund} = require('../../models')
+const {user, transaction, fund, profile} = require('../../models')
 
 //Create Controller register User here
 const registerUser = async(req,res,next) => {
@@ -31,14 +31,15 @@ const registerUser = async(req,res,next) => {
         });
 
         //create token for user
-        const token = await createToken(data.id,data.name,data.email);
+        const token = await createToken(data.id);
 
 
         res.send({
             status: "success",
             data: {user: {
                 name,
-                token
+                token,
+                id: data.id
             }}
         })
 
@@ -81,7 +82,7 @@ const loginUser = async(req,res,next) => {
         }
 
         //create token
-        const token = await createToken(data[0].id,data[0].name,data[0].email)
+        const token = await createToken(data[0].id)
         const {name} = data[0]
 
         res.send({
@@ -138,6 +139,11 @@ const getUserById = async(req,res,next) => {
                         as:"user",
                         attributes: {
                             exclude:["id","password","createdAt","updatedAt"]
+                        },
+                        model:fund,
+                        as:"UserDonate",
+                        attributes: {
+                            exclude: ["id","password","createdAt","updatedAt"]
                         }
                     },
                     attributes: {
@@ -159,6 +165,13 @@ const getUserById = async(req,res,next) => {
                             }
                         }
                     ]
+                },
+                {
+                    model: profile,
+                    as: "profile",
+                    attributes: {
+                        exclude:["createdAt","updatedAt","userId"]
+                    }
                 }
             ],
             attributes: {
@@ -205,10 +218,50 @@ const deleteUser = async(req,res,next) => {
     }
 }
 
+const updateUser = async(req,res,next) => {
+    try {
+        const {id} = req.params
+        const{...newData} = await updateUserSchema.validateAsync(req.body);
+
+        await user.update({...newData}, {
+            where : {
+                id
+            }
+        }, (err) => {
+            if(err) throw createError.InternalServerError()
+        })
+
+        const updateUser = await user.findAll({
+            where: {
+                id
+            },
+            attributes: {
+                exclude: ["password","updatedAt"]
+            }
+        });
+
+        res.send({
+            status: "success",
+            data: {user: [...updateUser]}
+        })
+
+        
+    } catch (err) {
+        //check if user is from joi
+        if(err.isJoi === true){
+            //if its from joi set the err.status 422 unprocessable entity
+            err.status = 422
+        }
+        console.log(err);
+        next(err)
+    }
+}
+
 module.exports = {
     registerUser,
     loginUser,
     getUsers,
     getUserById,
-    deleteUser
+    deleteUser,
+    updateUser
 }

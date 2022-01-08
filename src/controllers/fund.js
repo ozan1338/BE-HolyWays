@@ -89,7 +89,7 @@ const addFund = async(req,res,next) => {
         if(!req.file){
             throw createError.UnprocessableEntity("Please Upload Image")
         }
-        console.log(req.file);
+        //console.log(req.file);
         
         const data = await addFundSchema.validateAsync(req.body)
         const newFund = await fund.create({

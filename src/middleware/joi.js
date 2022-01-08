@@ -11,6 +11,11 @@ const loginSchema = joi.object({
     password: joi.string().min(4).required()
 });
 
+const updateUserSchema = joi.object({
+    email: joi.string().email().lowercase(),
+    name: joi.string()
+});
+
 const addFundSchema = joi.object({
     title: joi.string().required(),
     thumbnail: joi.string(),
@@ -32,6 +37,7 @@ const updateFundSchema = joi.object({
 module.exports = {
     registerSchema,
     loginSchema,
+    updateUserSchema,
     updateFundSchema,
     addFundSchema
 }

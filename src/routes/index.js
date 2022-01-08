@@ -2,13 +2,16 @@ const express = require("express");
 const router = express.Router();
 
 //User Controller
-const { registerUser,loginUser,getUsers,deleteUser, getUserById } = require("../controllers/user");
+const { registerUser,loginUser,getUsers,deleteUser, getUserById, updateUser } = require("../controllers/user");
 
 //Fund Controller
 const {getAllFunds, addFund, getFundById, updateFund, deleteFund} = require("../controllers/fund")
 
 //Transaction Controller
 const {addTransaction, updateTransaction} = require("../controllers/transaction")
+
+//Profile Contorller
+const {addProfile, updateProfile} = require("../controllers/profile")
 
 //import VerifyToken from jwt middleware
 const {verifyToken} = require("../middleware/jwt")
@@ -22,6 +25,7 @@ router.post("/user/login", loginUser);
 router.get("/user", getUsers);
 router.get('/user/:id', getUserById)
 router.delete("/user/:id", deleteUser);
+router.patch('/user/:id', updateUser)
 
 //Router Fund
 router.get("/fund", getAllFunds);
@@ -33,6 +37,10 @@ router.delete("/fund/:id", verifyToken, deleteFund);
 //Router Transaction
 router.post("/fund/:fundId", verifyToken, uploadFile("proofAttachment"), addTransaction);
 router.patch("/fund/:fundId/:userId/:id", verifyToken, updateTransaction);
+
+//Router Profile
+router.post("/profile/:userId", uploadFile("photoProfile"), addProfile)
+router.patch("/profile/:profileId", verifyToken, uploadFile("photoProfile"), updateProfile)
 
 
 module.exports = router

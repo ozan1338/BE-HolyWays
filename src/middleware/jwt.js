@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 const createError = require('http-errors');
 
-const createToken = (userId,userName,userEmail) => {
+const createToken = (userId) => {
     return new Promise((resolve,reject)=>{
-        jwt.sign({id:userId,name:userName,email:userEmail}, process.env.TOKEN_SECRET, (err,token)=>{
+        jwt.sign({id:userId}, process.env.TOKEN_SECRET, (err,token)=>{
             if(err){
                 console.log(err);
                 return reject(createError.InternalServerError())
