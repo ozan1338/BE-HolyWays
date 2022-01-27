@@ -92,6 +92,7 @@ const addFund = async(req,res,next) => {
         //console.log(req.file);
         
         const data = await addFundSchema.validateAsync(req.body)
+        console.log(req.body);
         const newFund = await fund.create({
             ...data,
             thumbnail : req.file.filename,
@@ -144,6 +145,7 @@ const updateFund = async(req,res,next) => {
         //const {...newData} = req.body
 
         const {...newData} = await updateFundSchema.validateAsync(req.body)
+        console.log(req.body);
 
         if(!req.file){
             await fund.update({...newData},{

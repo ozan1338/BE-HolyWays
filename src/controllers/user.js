@@ -90,7 +90,8 @@ const loginUser = async(req,res,next) => {
             data: {user: {
                 email,
                 name,
-                token
+                token,
+                id:data[0].id
             }}
         })
     } catch (err) {

@@ -163,7 +163,7 @@ const socketIo = (io) => {
                     idSender
                 })
 
-                io.to(socket.id).to(connectedUser[idRecepient]).emit("new-message", idRecepient)
+                io.to(socket.id).to(connectedUser[idRecepient]).emit("new-message", (idRecepient,idSender))
             } catch (error) {
                 console.log('\x1b[33m%s\x1b[0m', error);
             }

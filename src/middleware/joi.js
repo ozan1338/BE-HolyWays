@@ -21,7 +21,8 @@ const addFundSchema = joi.object({
     thumbnail: joi.string(),
     goal: joi.number().required(),
     description: joi.string().required(),
-    userId: joi.number()
+    userId: joi.number(),
+    expiredDate: joi.number().required()
 })
 
 const updateFundSchema = joi.object({
@@ -29,7 +30,8 @@ const updateFundSchema = joi.object({
     thumbnail: joi.string(),
     goal: joi.number(),
     description: joi.string(),
-    userId: joi.number()
+    userId: joi.number(),
+    expiredDate: joi.number()
 })
 
 

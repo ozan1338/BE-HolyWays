@@ -32,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     thumbnail: DataTypes.STRING,
     goal: DataTypes.INTEGER,
     description: DataTypes.STRING,
-    userId: DataTypes.INTEGER
+    userId: DataTypes.INTEGER,
+    expiredDate: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'fund',
