@@ -103,6 +103,8 @@ const socketIo = (io) => {
                 const token = socket.handshake.auth.token
                 const tokenKey = process.env.TOKEN_SECRET
 
+                console.log('\x1b[33m%s\x1b[0m', "HHAAII!!")
+
                 const verifiedToken = jwt.verify(token, tokenKey);
 
                 const idRecepient = payload
@@ -134,8 +136,13 @@ const socketIo = (io) => {
                         }
                     ],
                     order: [["createdAt", "ASC"]],
-                    exclude: ["updatedAt"]
+                    attributes: {
+
+                        exclude: ["updatedAt"]
+                    }
                 })
+
+                //console.log('\x1b[33m%s\x1b[0m', data[0], "hehe not bad!");
 
                 socket.emit("messages", data)
             } catch (error) {

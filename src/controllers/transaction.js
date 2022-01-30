@@ -4,6 +4,9 @@ const createError = require("http-errors")
 const addTransaction = async(req,res,next) => {
     try {
         
+        if(!req.file){
+            throw createError.UnprocessableEntity("Please Upload Image")
+        }
         const {fundId} = req.params
         const {...data} = req.body;
         //const userId = req.payload.id;

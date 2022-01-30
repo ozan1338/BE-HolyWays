@@ -36,7 +36,7 @@ router.delete("/fund/:id", verifyToken, deleteFund);
 
 //Router Transaction
 router.post("/fund/:fundId", verifyToken, uploadFile("proofAttachment"), addTransaction);
-router.patch("/fund/:fundId/:userId/:id", verifyToken, updateTransaction);
+router.patch("/fund/:fundId/:userId/:id", updateTransaction);
 
 //Router Profile
 router.post("/profile/:userId", uploadFile("photoProfile"), addProfile)
