@@ -63,14 +63,14 @@ const loginUser = async(req,res,next) => {
         const {email,password} = valid
 
         //search if email is in db or not
-        const data = await user.findAll({
+        const data = await user.findOne({
             where:{
                 email
             },
         });
 
         //if email that user input there is no in our db throw error with message
-        if(!data[0]){
+        if(!data){
             throw createError.NotFound("User Not Register")
         }
         //compare password that user input and password in our database
@@ -82,8 +82,8 @@ const loginUser = async(req,res,next) => {
         }
 
         //create token
-        const token = await createToken(data[0].id)
-        const {name} = data[0]
+        const token = await createToken(data.id)
+        const {name} = data
 
         res.send({
             status:"success",
@@ -91,7 +91,7 @@ const loginUser = async(req,res,next) => {
                 email,
                 name,
                 token,
-                id:data[0].id
+                id:data.id
             }}
         })
     } catch (err) {
@@ -180,7 +180,7 @@ const getUserById = async(req,res,next) => {
             }
         })
 
-        user[0].profile.photoProfile = process.env.PATH_FILE + user[0].profile.photoProfile
+        users[0].profile.photoProfile = process.env.PATH_FILE + users[0].profile.photoProfile
 
         res.send({
             status: "success",
