@@ -90,7 +90,7 @@ const updateProfile = async(req,res,next) => {
 
         if(req.file){
             //imageSrc = "http://localhost:5000/uploads/" + req.file.filename
-            imageSrc = result.public_id
+            imageSrc = process.env.PATH_FILE + result.public_id
         }
 
         if(!req.file){
