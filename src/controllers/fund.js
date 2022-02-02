@@ -27,7 +27,7 @@ const getAllFunds = async(req,res,next)=>{
         data = JSON.parse(JSON.stringify(data));
 
         data = data.map((item) => {
-            return { ...item, image: process.env.PATH_FILE + item.image };
+            return { ...item, thumbnail: process.env.PATH_FILE + item.thumbnail };
         });
 
         res.send({
@@ -82,7 +82,7 @@ const getFundById = async(req,res,next) => {
         data = JSON.parse(JSON.stringify(data));
 
         data = data.map((item) => {
-            return { ...item, image: process.env.PATH_FILE + item.image };
+            return { ...item, thumbnail: process.env.PATH_FILE + item.thumbnail };
         });
 
         res.send({
