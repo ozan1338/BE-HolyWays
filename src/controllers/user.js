@@ -184,6 +184,10 @@ const getUserById = async(req,res,next) => {
            users[0].profile.photoProfile = process.env.PATH_FILE + users[0].profile.photoProfile
         }
 
+        users[0].funds.map(item => {
+            return {...item, thumbnail: process.env.PATH_FILE + item.thumbnail}
+        })
+
         res.send({
             status: "success",
             data: {user: [...users]}
