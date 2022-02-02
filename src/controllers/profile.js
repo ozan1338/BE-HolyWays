@@ -23,7 +23,7 @@ const addProfile = async(req,res,next) => {
         // }
         
         if(!req.file){
-            imageSrc = process.env.PATH_FILE + "/holy-way/img_avatar_sxnc4d.png"
+            imageSrc = process.env.PATH_FILE + "holy-way/img_avatar_sxnc4d.png"
         }else {
             imageSrc = result.public_id
         }
