@@ -180,9 +180,9 @@ const getUserById = async(req,res,next) => {
             }
         })
 
-        if(users[0].profile.photoProfile){
-            users[0].profile.photoProfile = process.env.PATH_FILE + users[0].profile.photoProfile
-        }
+        //if(users[0].profile.photoProfile){
+        //    users[0].profile.photoProfile = process.env.PATH_FILE + users[0].profile.photoProfile
+        //}
 
         res.send({
             status: "success",
