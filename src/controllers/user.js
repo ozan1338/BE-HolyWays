@@ -180,6 +180,8 @@ const getUserById = async(req,res,next) => {
             }
         })
 
+        user[0].profile.photoProfile = process.env.PATH_FILE + user[0].profile.photoProfile
+
         res.send({
             status: "success",
             data: {user: [...users]}

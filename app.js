@@ -22,7 +22,7 @@ require('./src/socket/index')(io)
 //serve static file
 app.use('/uploads', express.static('uploads'))
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 //use morgan
 app.use(morgan("dev"));
 //user cors

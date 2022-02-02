@@ -1,5 +1,6 @@
 const createError = require("http-errors");
 const {user, profile} = require("../../models")
+const cloudinary = require('../utils/cloudinary');
 
 const addProfile = async(req,res,next) => {
     try {
@@ -9,10 +10,22 @@ const addProfile = async(req,res,next) => {
         //console.error(req.body);
         let imageSrc = ""
 
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'holy-way',
+            use_filename: true,
+            unique_filename: false,
+        });
+
+        // if(!req.file){
+        //     imageSrc = "http://localhost:5000/uploads/img_avatar.png"
+        // }else {
+        //     imageSrc = "http://localhost:5000/uploads/" + req.file.filename
+        // }
+        
         if(!req.file){
-            imageSrc = "http://localhost:5000/uploads/img_avatar.png"
+            imageSrc = process.env.PATH_FILE + "/holy-way/img_avatar_sxnc4d.png"
         }else {
-            imageSrc = "http://localhost:5000/uploads/" + req.file.filename
+            imageSrc = result.public_id
         }
 
         await profile.create({
@@ -69,8 +82,15 @@ const updateProfile = async(req,res,next) => {
         const {...data} = req.body
         let imageSrc = ""
 
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'holy-way',
+            use_filename: true,
+            unique_filename: false,
+        });
+
         if(req.file){
-            imageSrc = "http://localhost:5000/uploads/" + req.file.filename
+            //imageSrc = "http://localhost:5000/uploads/" + req.file.filename
+            imageSrc = result.public_id
         }
 
         if(!req.file){

@@ -1,5 +1,6 @@
 const {transaction, fund, user} = require('../../models')
 const createError = require("http-errors")
+const cloudinary = require('../utils/cloudinary');
 
 const addTransaction = async(req,res,next) => {
     try {
@@ -7,14 +8,21 @@ const addTransaction = async(req,res,next) => {
         if(!req.file){
             throw createError.UnprocessableEntity("Please Upload Image")
         }
+
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'holy-way',
+            use_filename: true,
+            unique_filename: false,
+        });
+
         const {fundId} = req.params
         const {...data} = req.body;
         //const userId = req.payload.id;
-        let imageSrc = "http://localhost:5000/uploads/" + req.file.filename
+        //let imageSrc = "http://localhost:5000/uploads/" + req.file.filename
 
         await transaction.create({
             ...data,
-            proofAttachment: imageSrc,
+            proofAttachment: result.public_id,
             userId:req.payload.id,
             fundId:fundId,
             status: "pending"

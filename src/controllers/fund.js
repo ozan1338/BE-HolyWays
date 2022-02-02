@@ -1,6 +1,7 @@
 const {transaction, fund, user} = require('../../models')
 const createError = require("http-errors")
 const {addFundSchema , updateFundSchema} = require("../middleware/joi")
+const cloudinary = require('../utils/cloudinary');
 
 const getAllFunds = async(req,res,next)=>{
     try {
@@ -22,6 +23,12 @@ const getAllFunds = async(req,res,next)=>{
                 throw createError.InternalServerError();
             }
         })
+
+        data = JSON.parse(JSON.stringify(data));
+
+        data = data.map((item) => {
+            return { ...item, image: process.env.PATH_FILE + item.image };
+        });
 
         res.send({
             status:"success",
@@ -72,6 +79,12 @@ const getFundById = async(req,res,next) => {
             throw createError.NotFound("Not Found")
         }
 
+        data = JSON.parse(JSON.stringify(data));
+
+        data = data.map((item) => {
+            return { ...item, image: process.env.PATH_FILE + item.image };
+        });
+
         res.send({
             status:"Success",
             data:{fund: data}
@@ -92,10 +105,17 @@ const addFund = async(req,res,next) => {
         //console.log(req.file);
         
         const data = await addFundSchema.validateAsync(req.body)
-        console.log(req.body);
+        //console.log(req.body);
+
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'holy-way',
+            use_filename: true,
+            unique_filename: false,
+        });
+
         const newFund = await fund.create({
             ...data,
-            thumbnail : req.file.filename,
+            thumbnail : result.public_id,
             userId: req.payload.id
         }, (err)=>{
             if(err){
@@ -139,6 +159,7 @@ const addFund = async(req,res,next) => {
     }
 }
 
+//still no use in our web app
 const updateFund = async(req,res,next) => {
     try {
         const {id} = req.params
