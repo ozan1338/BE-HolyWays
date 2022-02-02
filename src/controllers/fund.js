@@ -5,7 +5,7 @@ const cloudinary = require('../utils/cloudinary');
 
 const getAllFunds = async(req,res,next)=>{
     try {
-        const data = await fund.findAll({
+        let data = await fund.findAll({
             include:[
                 {
                     model:transaction,
@@ -46,7 +46,7 @@ const getFundById = async(req,res,next) => {
 
         const {id} = req.params;
 
-        const data = await fund.findAll({
+        let data = await fund.findAll({
             where: {
                 id
             },
@@ -166,7 +166,7 @@ const updateFund = async(req,res,next) => {
         //const {...newData} = req.body
 
         const {...newData} = await updateFundSchema.validateAsync(req.body)
-        console.log(req.body);
+        //console.log(req.body);
 
         if(!req.file){
             await fund.update({...newData},{
