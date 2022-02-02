@@ -45,8 +45,8 @@ module.exports = (sequelize, DataTypes) => {
       // fund.map((item)=>{
       //   return item.thumbnail = "http://localhost:5000/uploads/" + item.thumbnail;
       // })
-      let imageSrc = "http://localhost:5000/uploads/" + fund.thumbnail;
-      fund.thumbnail = imageSrc;
+      //let imageSrc = "http://localhost:5000/uploads/" + fund.thumbnail;
+      //fund.thumbnail = imageSrc;
     } catch (err) {
       throw createError.InternalServerError(err.message);
     }
