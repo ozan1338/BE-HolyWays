@@ -18,11 +18,11 @@ const addTransaction = async(req,res,next) => {
         const {fundId} = req.params
         const {...data} = req.body;
         //const userId = req.payload.id;
-        //let imageSrc = "http://localhost:5000/uploads/" + req.file.filename
+        let imageSrc = process.env.PATH_FILE + result.public_id
 
         await transaction.create({
             ...data,
-            proofAttachment: result.public_id,
+            proofAttachment: imageSrc,
             userId:req.payload.id,
             fundId:fundId,
             status: "pending"
