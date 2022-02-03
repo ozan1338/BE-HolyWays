@@ -27,7 +27,7 @@ const registerUser = async(req,res,next) => {
         const data = await user.create({
             ...valid,
             photoProfile: "",
-            phoneNumber: ""
+            phoneNumber: 0
         }, (err)=>{
             if(err){
                 throw createError.InternalServerError();
@@ -78,7 +78,7 @@ const loginUser = async(req,res,next) => {
             throw createError.NotFound("User Not Register")
         }
         //compare password that user input and password in our database
-        const isMatch = await bcrypt.compare(password, data[0].password)
+        const isMatch = await bcrypt.compare(password, data.password)
         
         //if not match throw error with message
         if(!isMatch){
