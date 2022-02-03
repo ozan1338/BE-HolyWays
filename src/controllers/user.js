@@ -188,6 +188,10 @@ const getUserById = async(req,res,next) => {
         //    users[0].profile.photoProfile = process.env.PATH_FILE + users[0].profile.photoProfile
         // }
 
+        if(user[0].photoProfile){
+            user[0].photoProfile = process.env.PATH_FILE + users[0].photoProfile
+        }
+
         users[0].funds.map(item => {
             return {...item, thumbnail: process.env.PATH_FILE + item.thumbnail}
         })
