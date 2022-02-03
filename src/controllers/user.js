@@ -24,7 +24,11 @@ const registerUser = async(req,res,next) => {
         }
 
         //save user input to db
-        const data = await user.create(valid, (err)=>{
+        const data = await user.create({
+            ...valid,
+            photoProfile: "",
+            phoneNumber: ""
+        }, (err)=>{
             if(err){
                 throw createError.InternalServerError();
             }
@@ -180,9 +184,9 @@ const getUserById = async(req,res,next) => {
             }
         })
 
-        if(users[0].profile){
-           users[0].profile.photoProfile = process.env.PATH_FILE + users[0].profile.photoProfile
-        }
+        // if(users[0].profile){
+        //    users[0].profile.photoProfile = process.env.PATH_FILE + users[0].profile.photoProfile
+        // }
 
         users[0].funds.map(item => {
             return {...item, thumbnail: process.env.PATH_FILE + item.thumbnail}
