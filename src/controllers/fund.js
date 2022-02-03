@@ -26,9 +26,9 @@ const getAllFunds = async(req,res,next)=>{
 
         data = JSON.parse(JSON.stringify(data));
 
-        data = data.map((item) => {
-            return { ...item, thumbnail: process.env.PATH_FILE + item.thumbnail };
-        });
+        //data = data.map((item) => {
+        //    return { ...item, thumbnail: process.env.PATH_FILE + item.thumbnail };
+        //});
 
         res.send({
             status:"success",
@@ -81,9 +81,9 @@ const getFundById = async(req,res,next) => {
 
         data = JSON.parse(JSON.stringify(data));
 
-        data = data.map((item) => {
-            return { ...item, thumbnail: process.env.PATH_FILE + item.thumbnail };
-        });
+        //data = data.map((item) => {
+        //    return { ...item, thumbnail: process.env.PATH_FILE + item.thumbnail };
+        //});
 
         res.send({
             status:"Success",
@@ -113,9 +113,12 @@ const addFund = async(req,res,next) => {
             unique_filename: false,
         });
 
+        let imageSrc = process.env.PATH_FILE + result.public_id
+
+
         const newFund = await fund.create({
             ...data,
-            thumbnail : result.public_id,
+            thumbnail : imageSrc,
             userId: req.payload.id
         }, (err)=>{
             if(err){

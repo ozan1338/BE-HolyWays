@@ -188,13 +188,13 @@ const getUserById = async(req,res,next) => {
         //    users[0].profile.photoProfile = process.env.PATH_FILE + users[0].profile.photoProfile
         // }
 
-        if(user[0].photoProfile){
-            user[0].photoProfile = process.env.PATH_FILE + users[0].photoProfile
-        }
+        //if(user[0].photoProfile){
+        //    user[0].photoProfile = process.env.PATH_FILE + users[0].photoProfile
+        //}
 
-        users[0].funds.map(item => {
-            return {...item, thumbnail: process.env.PATH_FILE + item.thumbnail}
-        })
+        //users[0].funds.map(item => {
+        //    return {...item, thumbnail: process.env.PATH_FILE + item.thumbnail}
+        //})
 
         res.send({
             status: "success",
@@ -240,7 +240,19 @@ const updateUser = async(req,res,next) => {
         const {id} = req.params
         const{...newData} = await updateUserSchema.validateAsync(req.body);
 
-        await user.update({...newData}, {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+            folder: 'holy-way',
+            use_filename: true,
+            unique_filename: false,
+        });
+
+        let imageSrc = process.env.PATH_FILE + result.public_id
+
+
+        await user.update({
+            ...newData,
+            photoProfile: imageSrc
+        }, {
             where : {
                 id
             }
