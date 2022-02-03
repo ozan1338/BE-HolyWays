@@ -240,26 +240,41 @@ const updateUser = async(req,res,next) => {
     try {
         const {id} = req.params
         const{...newData} = await updateUserSchema.validateAsync(req.body);
+        let imageSrc
 
-        const result = await cloudinary.uploader.upload(req.file.path, {
-            folder: 'holy-way',
-            use_filename: true,
-            unique_filename: false,
-        });
+        if(req.file){
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'holy-way',
+                use_filename: true,
+                unique_filename: false,
+            });
+            imageSrc = process.env.PATH_FILE + result.public_id
+        }
 
-        let imageSrc = process.env.PATH_FILE + result.public_id
 
+        if(req.file){
+            await user.update({
+                ...newData,
+                photoProfile: imageSrc
+            }, {
+                where : {
+                    id
+                }
+            }, (err) => {
+                if(err) throw createError.InternalServerError()
+            })
+        }else{
+            await user.update({
+                ...newData,
+            }, {
+                where : {
+                    id
+                }
+            }, (err) => {
+                if(err) throw createError.InternalServerError()
+            })
 
-        await user.update({
-            ...newData,
-            photoProfile: imageSrc
-        }, {
-            where : {
-                id
-            }
-        }, (err) => {
-            if(err) throw createError.InternalServerError()
-        })
+        }
 
         const updateUser = await user.findAll({
             where: {
