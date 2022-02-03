@@ -25,7 +25,7 @@ router.post("/user/login", loginUser);
 router.get("/user", getUsers);
 router.get('/user/:id', getUserById)
 router.delete("/user/:id", deleteUser);
-router.patch('/user/:id', updateUser)
+router.patch('/user/:id', uploadFile("photoProfile"),updateUser)
 
 //Router Fund
 router.get("/fund", getAllFunds);
