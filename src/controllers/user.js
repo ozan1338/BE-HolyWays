@@ -3,6 +3,7 @@ const createError = require('http-errors')
 const {createToken} = require('../middleware/jwt')
 const bcrypt = require('bcrypt')
 const {user, transaction, fund, profile} = require('../../models')
+const cloudinary = require('../utils/cloudinary');
 
 //Create Controller register User here
 const registerUser = async(req,res,next) => {
