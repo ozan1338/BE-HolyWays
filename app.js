@@ -14,7 +14,7 @@ const app = express();
 const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
-        origin: "https://friendly-blackwell-c92480.netlify.app/"||'http://localhost:3000',
+        origin: ["https://friendly-blackwell-c92480.netlify.app",'http://localhost:3000'],
         credentials: true
     }
 })
